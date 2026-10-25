@@ -1,0 +1,49 @@
+﻿# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Build output
+Frontend/dist/
+Frontend/build/
+Backend/dist/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Backups
+Backups/
+Frontend-Repair-Backups/
+backup-auth-fix-*/
+chat-admin-backup-*/
+chat-admin-backup_*/
+chat-diagnostic-backup_*/
+chat-fix-backup-*/
+ShopMart-Category-Backup/
+
+# Operating system / editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Temporary and backup source files
+*.bak
+*.backup
+*.before-*
+*.check.js
+
+# All editor and timestamped backup files
+*.bak
+*.bak.*
+*.backup
+*.backup-*
+*.backup_*
+*.before-*
+*.before_*
+*.check.js
