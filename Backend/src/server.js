@@ -1,6 +1,6 @@
-// ============================================================
+﻿// ============================================================
 // SHOPMART BACKEND
-// PHASE 25 — SECURITY
+// PHASE 25 â€” SECURITY
 // FILE: backend/src/server.js
 // ============================================================
 
@@ -38,61 +38,61 @@ const {
 // ROUTES
 // ============================================================
 
-// PHASE 4 — Users / Authentication
+// PHASE 4 â€” Users / Authentication
 const userRoutes = require("./routes/userRoutes");
 
-// PHASE 5/6 — Products
+// PHASE 5/6 â€” Products
 const productRoutes = require("./routes/productRoutes");
 
-// PHASE 6 — Categories
+// PHASE 6 â€” Categories
 const categoryRoutes = require("./routes/categoryRoutes");
 
-// PHASE 11 — Orders
+// PHASE 11 â€” Orders
 const orderRoutes = require("./routes/orderRoutes");
 
-// PHASE 9 — Coupons
+// PHASE 9 â€” Coupons
 const couponRoutes = require("./routes/couponRoutes");
 
-// PHASE 10 — Payments
+// PHASE 10 â€” Payments
 const paymentRoutes = require("./routes/paymentRoutes");
 
-// PHASE 12 — Notifications
+// PHASE 12 â€” Notifications
 const notificationRoutes = require("./routes/notificationRoutes");
 
-// PHASE 13 — Returns
+// PHASE 13 â€” Returns
 const returnRoutes = require("./routes/returnRoutes");
 
-// PHASE 14 — Reviews
+// PHASE 14 â€” Reviews
 const reviewRoutes = require("./routes/reviewRoutes");
 
-// PHASE 15 — Seller Registration
+// PHASE 15 â€” Seller Registration
 const sellerRoutes = require("./routes/sellerRoutes");
 
-// PHASE 17 — Seller Products
+// PHASE 17 â€” Seller Products
 const sellerProductRoutes = require("./routes/sellerProductRoutes");
 
-// PHASE 18 — Seller Orders
+// PHASE 18 â€” Seller Orders
 const sellerOrderRoutes = require("./routes/sellerOrderRoutes");
 
-// PHASE 18 — Seller Returns
+// PHASE 18 â€” Seller Returns
 const sellerReturnRoutes = require("./routes/sellerReturnRoutes");
 
-// PHASE 19 — Support Tickets
+// PHASE 19 â€” Support Tickets
 const supportTicketRoutes = require("./routes/supportTicketRoutes");
 
-// PHASE 20 — Seller Analytics
+// PHASE 20 â€” Seller Analytics
 const sellerAnalyticsRoutes = require("./routes/sellerAnalyticsRoutes");
 
-// PHASE 21 — Seller Earnings
+// PHASE 21 â€” Seller Earnings
 const sellerEarningsRoutes = require("./routes/sellerEarningsRoutes");
 
-// PHASE 22 — Admin Dashboard
+// PHASE 22 â€” Admin Dashboard
 const adminDashboardRoutes = require("./routes/adminDashboardRoutes");
 
-// PHASE 23 — Admin Management
+// PHASE 23 â€” Admin Management
 const adminManagementRoutes = require("./routes/adminManagementRoutes");
 
-// PHASE 24 — Live Chat
+// PHASE 24 â€” Live Chat
 const chatRoutes = require("./routes/chatRoutes");
 
 // ============================================================
@@ -161,6 +161,8 @@ app.use(
 const allowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
+  "https://shopmart-frontend-three.vercel.app",
+  "https://shopmart-frontend-c3nfnwhdl-saad-portfolio1.vercel.app",
   process.env.FRONTEND_URL,
 ].filter(Boolean);
 
@@ -206,7 +208,7 @@ app.use(
 app.use("/api", apiLimiter);
 
 // ============================================================
-// PHASE 10 — STRIPE WEBHOOK
+// PHASE 10 â€” STRIPE WEBHOOK
 //
 // IMPORTANT:
 // Stripe webhook MUST come before express.json()
@@ -267,7 +269,7 @@ app.use(
 // ============================================================
 
 // ============================================================
-// PHASE 4 — USERS / AUTHENTICATION
+// PHASE 4 â€” USERS / AUTHENTICATION
 // ============================================================
 
 app.use(
@@ -276,7 +278,7 @@ app.use(
 );
 
 // ============================================================
-// PHASE 5/6 — PRODUCTS
+// PHASE 5/6 â€” PRODUCTS
 // ============================================================
 
 app.use(
@@ -285,7 +287,7 @@ app.use(
 );
 
 // ============================================================
-// PHASE 6 — CATEGORIES
+// PHASE 6 â€” CATEGORIES
 // ============================================================
 
 app.use(
@@ -294,7 +296,7 @@ app.use(
 );
 
 // ============================================================
-// PHASE 11 — ORDERS + TRACKING
+// PHASE 11 â€” ORDERS + TRACKING
 // ============================================================
 
 app.use(
@@ -303,7 +305,7 @@ app.use(
 );
 
 // ============================================================
-// PHASE 9 — COUPONS
+// PHASE 9 â€” COUPONS
 // ============================================================
 
 app.use(
@@ -312,7 +314,7 @@ app.use(
 );
 
 // ============================================================
-// PHASE 10 — STRIPE PAYMENTS
+// PHASE 10 â€” STRIPE PAYMENTS
 // ============================================================
 
 app.use(
@@ -321,7 +323,7 @@ app.use(
 );
 
 // ============================================================
-// PHASE 12 — NOTIFICATIONS
+// PHASE 12 â€” NOTIFICATIONS
 // ============================================================
 
 app.use(
@@ -330,7 +332,7 @@ app.use(
 );
 
 // ============================================================
-// PHASE 13 — RETURNS / REFUNDS
+// PHASE 13 â€” RETURNS / REFUNDS
 // ============================================================
 
 app.use(
@@ -339,7 +341,7 @@ app.use(
 );
 
 // ============================================================
-// PHASE 14 — REVIEWS + RATINGS
+// PHASE 14 â€” REVIEWS + RATINGS
 // ============================================================
 
 app.use(
@@ -348,7 +350,7 @@ app.use(
 );
 
 // ============================================================
-// PHASE 15 — SELLER REGISTRATION
+// PHASE 15 â€” SELLER REGISTRATION
 // ============================================================
 
 app.use(
@@ -357,7 +359,7 @@ app.use(
 );
 
 // ============================================================
-// PHASE 17 — SELLER PRODUCTS + INVENTORY
+// PHASE 17 â€” SELLER PRODUCTS + INVENTORY
 // ============================================================
 
 app.use(
@@ -366,7 +368,7 @@ app.use(
 );
 
 // ============================================================
-// PHASE 18 — SELLER ORDERS
+// PHASE 18 â€” SELLER ORDERS
 // ============================================================
 
 app.use(
@@ -375,7 +377,7 @@ app.use(
 );
 
 // ============================================================
-// PHASE 18 — SELLER RETURNS
+// PHASE 18 â€” SELLER RETURNS
 // ============================================================
 
 app.use(
@@ -384,7 +386,7 @@ app.use(
 );
 
 // ============================================================
-// PHASE 19 — SELLER SUPPORT TICKETS
+// PHASE 19 â€” SELLER SUPPORT TICKETS
 // ============================================================
 
 app.use(
@@ -393,7 +395,7 @@ app.use(
 );
 
 // ============================================================
-// PHASE 20 — SELLER ANALYTICS
+// PHASE 20 â€” SELLER ANALYTICS
 // ============================================================
 
 app.use(
@@ -402,7 +404,7 @@ app.use(
 );
 
 // ============================================================
-// PHASE 21 — SELLER EARNINGS + PAYOUTS
+// PHASE 21 â€” SELLER EARNINGS + PAYOUTS
 // ============================================================
 
 app.use(
@@ -411,7 +413,7 @@ app.use(
 );
 
 // ============================================================
-// PHASE 22 — ADMIN DASHBOARD
+// PHASE 22 â€” ADMIN DASHBOARD
 // ============================================================
 
 app.use(
@@ -420,7 +422,7 @@ app.use(
 );
 
 // ============================================================
-// PHASE 23 — ADMIN MANAGEMENT
+// PHASE 23 â€” ADMIN MANAGEMENT
 // ============================================================
 
 app.use(
@@ -429,7 +431,7 @@ app.use(
 );
 
 // ============================================================
-// PHASE 24 — LIVE CHAT
+// PHASE 24 â€” LIVE CHAT
 // ============================================================
 
 app.use(
@@ -444,12 +446,12 @@ app.use(
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
-    message: "ShopMart Backend API is running 🚀",
+    message: "ShopMart Backend API is running ðŸš€",
   });
 });
 
 // ============================================================
-// 404 — API ROUTE NOT FOUND
+// 404 â€” API ROUTE NOT FOUND
 // ============================================================
 
 app.use((req, res) => {
@@ -495,10 +497,10 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(
-    `🚀 ShopMart Backend running on http://localhost:${PORT}`
+    `ðŸš€ ShopMart Backend running on http://localhost:${PORT}`
   );
 
   console.log(
-    `🔐 Security: Phase 25 enabled`
+    `ðŸ” Security: Phase 25 enabled`
   );
 });
