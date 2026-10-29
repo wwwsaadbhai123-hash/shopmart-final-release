@@ -2718,3 +2718,422 @@ body.dash-lock { overflow: hidden; }
 }
 
 /* ===== END LIVE CHAT FIX ===== */
+
+/* ===== SHOPMART CUSTOMER FLOATING CHAT ===== */
+.sm-floating-chat {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 99999;
+  font-family: inherit;
+}
+
+.sm-chat-launcher {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 58px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #2563eb, #1747b8);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 32px rgba(37, 99, 235, .34);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.sm-chat-launcher:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px rgba(37, 99, 235, .42);
+}
+
+.sm-chat-launcher svg {
+  width: 25px;
+  height: 25px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sm-chat-launcher.is-open {
+  width: 54px;
+  min-height: 54px;
+  padding: 0;
+}
+
+.sm-chat-launcher-x {
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.sm-chat-popup {
+  position: absolute;
+  right: 0;
+  bottom: 72px;
+  display: flex;
+  flex-direction: column;
+  width: 370px;
+  height: min(590px, calc(100dvh - 120px));
+  min-height: 360px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  background: #fff;
+  color: #172033;
+  box-shadow: 0 24px 75px rgba(15, 23, 42, .24);
+  animation: sm-chat-enter .2s ease-out;
+}
+
+@keyframes sm-chat-enter {
+  from { opacity: 0; transform: translateY(10px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.sm-chat-topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 19px;
+  background: linear-gradient(135deg, #2563eb, #173f9e);
+  color: #fff;
+}
+
+.sm-chat-brand-icon {
+  display: grid;
+  place-items: center;
+  width: 43px;
+  height: 43px;
+  flex: 0 0 43px;
+  border: 1px solid rgba(255,255,255,.4);
+  border-radius: 14px;
+  background: rgba(255,255,255,.16);
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.sm-chat-brand {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.sm-chat-brand strong {
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.sm-chat-brand span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: rgba(255,255,255,.88);
+  font-size: 12px;
+}
+
+.sm-chat-brand span i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #86efac;
+}
+
+.sm-chat-close {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,.14);
+  color: #fff;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.sm-chat-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+  padding: 18px;
+  overflow-y: auto;
+  background: #f8fafc;
+}
+
+.sm-chat-welcome {
+  padding: 16px;
+  border: 1px solid #e8eef8;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.sm-chat-welcome strong {
+  color: #172033;
+  font-size: 16px;
+}
+
+.sm-chat-welcome p {
+  margin: 7px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.sm-chat-section-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .09em;
+}
+
+.sm-chat-conversation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.sm-chat-thread {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sm-chat-thread.selected {
+  border-color: #93b4ff;
+  background: #eff6ff;
+}
+
+.sm-chat-thread-icon {
+  display: grid;
+  place-items: center;
+  width: 33px;
+  height: 33px;
+  flex: 0 0 33px;
+  border-radius: 10px;
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.sm-chat-thread-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.sm-chat-thread-text strong,
+.sm-chat-thread-text small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sm-chat-thread-text strong {
+  color: #1e293b;
+  font-size: 12px;
+}
+
+.sm-chat-thread-text small {
+  color: #64748b;
+  font-size: 11px;
+}
+
+.sm-chat-thread-status {
+  color: #64748b;
+  font-size: 10px;
+}
+
+.sm-chat-thread-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sm-chat-no-messages {
+  margin: 0;
+  padding: 12px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.sm-chat-message {
+  display: flex;
+  flex-direction: column;
+  max-width: 86%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  overflow-wrap: anywhere;
+}
+
+.sm-chat-message.mine {
+  align-self: flex-end;
+  border-bottom-right-radius: 5px;
+  background: #2563eb;
+  color: #fff;
+}
+
+.sm-chat-message.theirs {
+  align-self: flex-start;
+  border: 1px solid #e2e8f0;
+  border-bottom-left-radius: 5px;
+  background: #fff;
+  color: #1e293b;
+}
+
+.sm-chat-message p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.sm-chat-message small {
+  margin-top: 5px;
+  align-self: flex-end;
+  font-size: 10px;
+  opacity: .75;
+}
+
+.sm-chat-error {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.sm-chat-start {
+  width: 100%;
+  min-height: 46px;
+  border: 0;
+  border-radius: 12px;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.sm-chat-start:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.sm-chat-composer {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: auto;
+  padding: 7px;
+  border: 1px solid #dbe3ef;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, .04);
+}
+
+.sm-chat-composer input {
+  width: 100%;
+  min-width: 0;
+  height: 38px;
+  padding: 0 8px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #172033;
+  font: inherit;
+  font-size: 13px;
+}
+
+.sm-chat-composer input:focus {
+  box-shadow: none;
+}
+
+.sm-chat-composer button {
+  display: grid;
+  place-items: center;
+  width: 39px;
+  height: 39px;
+  flex: 0 0 39px;
+  border: 0;
+  border-radius: 11px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 19px;
+  cursor: pointer;
+}
+
+.sm-chat-composer button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.sm-chat-login-note {
+  margin: 0;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.sm-chat-footer {
+  padding: 10px;
+  border-top: 1px solid #edf1f6;
+  background: #fff;
+  color: #94a3b8;
+  font-size: 10px;
+  text-align: center;
+}
+
+.sm-chat-footer strong {
+  color: #64748b;
+}
+
+@media (max-width: 480px) {
+  .sm-floating-chat {
+    right: 14px;
+    bottom: 14px;
+  }
+
+  .sm-chat-popup {
+    position: fixed;
+    right: 10px;
+    bottom: 80px;
+    width: calc(100vw - 20px);
+    height: min(600px, calc(100dvh - 105px));
+    min-height: 330px;
+    border-radius: 18px;
+  }
+
+  .sm-chat-launcher {
+    min-height: 52px;
+    padding: 0 17px;
+    font-size: 13px;
+  }
+
+  .sm-chat-content {
+    padding: 13px;
+  }
+}
+/* ===== END SHOPMART CUSTOMER FLOATING CHAT ===== */

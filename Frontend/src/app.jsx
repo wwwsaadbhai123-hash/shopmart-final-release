@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import "./App.css";
 import { API_BASE_URL } from "./config";
 import { handleAuthResponse } from "./utils/authSession";
@@ -37,11 +37,12 @@ import SellerEarnings from "./Components/SellerEarnings";
 import AdminDashboard from "./Components/AdminDashboard";
 import AdminManagement from "./Components/AdminManagement";
 import LiveChat from "./Components/LiveChat";
+import FloatingChat from "./Components/FloatingChat";
 import DashboardShell from "./Components/DashboardShell";
 
 // ============================================================
 // API CONFIG
-// (imported from ./config Ã¢â‚¬â€ see top of file)
+// (imported from ./config ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â see top of file)
 // ============================================================
 
 const GOOGLE_CLIENT_ID =
@@ -218,7 +219,7 @@ const RatingStars = ({ rating = 0 }) => {
     >
       {[1, 2, 3, 4, 5].map((star) => (
         <span key={star}>
-          {star <= roundedRating ? "★" : "☆"}
+          {star <= roundedRating ? "â˜…" : "â˜†"}
         </span>
       ))}
     </div>
@@ -2021,7 +2022,7 @@ export default function App() {
             aria-label="Close menu"
             onClick={closeNav}
           >
-            ×
+            Ã—
           </button>
 
           <button type="button" onClick={() => goToSection("home")}>
@@ -2138,7 +2139,7 @@ export default function App() {
       label: "Management",
       items: [
         { id: "users", label: "Users", icon: String.fromCodePoint(0x1F465) },
-        { id: "sellers", label: "Sellers", icon: "Ã°Å¸ÂÂª" },
+        { id: "sellers", label: "Sellers", icon: "ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Âª" },
         { id: "products", label: "Products", icon: String.fromCodePoint(0x1F4E6) },
         { id: "orders", label: "Orders", icon: String.fromCodePoint(0x1F9FE) },
         { id: "returns", label: "Returns", icon: String.fromCodePoint(0x21A9) },
@@ -2278,7 +2279,7 @@ export default function App() {
                 )
               }
             >
-              Ã¢â€ Â Back to Shop
+              ÃƒÂ¢Ã¢â‚¬Â Ã‚Â Back to Shop
             </button>
 
             <div className="product-details-grid">
@@ -2379,7 +2380,7 @@ export default function App() {
                         )
                       }
                     >
-                      −
+                      âˆ’
                     </button>
 
                     <span>
@@ -2443,8 +2444,8 @@ export default function App() {
                         item?._id ===
                         selectedProduct?._id
                     )
-                      ? "Ã¢â„¢Â¥ Wishlisted"
-                      : "Ã¢â„¢Â¡ Wishlist"}
+                      ? "ÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¥ Wishlisted"
+                      : "ÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¡ Wishlist"}
                   </button>
 
                 </div>
@@ -2966,7 +2967,7 @@ export default function App() {
                               )
                             }
                           >
-                            −
+                            âˆ’
                           </button>
 
                           <span>
@@ -3280,7 +3281,7 @@ export default function App() {
                               </span>
 
                               <span>
-                                ×{" "}
+                                Ã—{" "}
                                 {item?.quantity ||
                                   1}
                               </span>
@@ -3379,7 +3380,7 @@ export default function App() {
             </p>
           </div>
 
-          <LiveChat refreshKey={chatRefreshKey} />
+          <FloatingChat refreshKey={chatRefreshKey} />
         </div>
       </section>
 
@@ -3472,7 +3473,7 @@ export default function App() {
                 )
               }
             >
-              ×
+              Ã—
             </button>
 
             <h2>
@@ -3740,7 +3741,7 @@ export default function App() {
 
           <div className="footer-bottom">
 
-            ©{" "}
+            Â©{" "}
             {new Date().getFullYear()}{" "}
             ShopMart. All rights
             reserved.
@@ -3754,5 +3755,6 @@ export default function App() {
     </div>
   );
 }
+
 
 
