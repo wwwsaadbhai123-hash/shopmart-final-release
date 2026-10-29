@@ -1,18 +1,13 @@
 import { useEffect, useState } from "react";
 import { API_BASE_URL } from "../config";
 
+const getToken = () =>
+  localStorage.getItem("token") ||
+  localStorage.getItem("authToken") ||
+  localStorage.getItem("accessToken");
 
-const getToken = () => {
-  return (
-    localStorage.getItem("token") ||
-    localStorage.getItem("authToken") ||
-    localStorage.getItem("accessToken")
-  );
-};
-
-const formatPrice = (value) => {
-  return `Rs. ${Number(value || 0).toLocaleString()}`;
-};
+const formatPrice = (value) =>
+  `Rs. ${Number(value || 0).toLocaleString("en-PK")}`;
 
 const formatDate = (date) => {
   if (!date) return "-";
@@ -25,22 +20,18 @@ const formatDate = (date) => {
 };
 
 const getStatusClass = (status) => {
-  switch (status) {
+  switch (String(status || "").toLowerCase()) {
     case "delivered":
       return "status-success";
-
     case "cancelled":
       return "status-danger";
-
     case "pending":
       return "status-warning";
-
     case "processing":
+    case "confirmed":
       return "status-info";
-
     case "shipped":
       return "status-primary";
-
     default:
       return "";
   }
@@ -50,6 +41,9 @@ export default function AdminDashboard({ refreshKey = 0 }) {
   const [dashboard, setDashboard] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [darkMode, setDarkMode] = useState(false);
 
   const fetchDashboard = async () => {
     try {
@@ -92,13 +86,49 @@ export default function AdminDashboard({ refreshKey = 0 }) {
     fetchDashboard();
   }, [refreshKey]);
 
+  const exportOrders = () => {
+    const rows = dashboard?.recentOrders || [];
+
+    const escapeCSV = (value) =>
+      `"${String(value ?? "").replace(/"/g, '""')}"`;
+
+    const csv = [
+      ["Order ID", "Customer", "Email", "Amount", "Status", "Date"]
+        .map(escapeCSV)
+        .join(","),
+      ...rows.map((order) =>
+        [
+          order._id,
+          order.user?.name || "Customer",
+          order.user?.email || "",
+          order.totalAmount,
+          order.status,
+          order.createdAt,
+        ]
+          .map(escapeCSV)
+          .join(",")
+      ),
+    ].join("\r\n");
+
+    const url = URL.createObjectURL(
+      new Blob([csv], { type: "text/csv;charset=utf-8;" })
+    );
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "shopmart-orders.csv";
+    link.click();
+
+    URL.revokeObjectURL(url);
+  };
+
   if (loading) {
     return (
-      <div className="admin-dashboard">
+      <div className={`admin-dashboard ${darkMode ? "admin-dashboard-dark" : ""}`}>
         <div className="admin-dashboard-header">
           <div>
-            <h2>Admin Dashboard</h2>
-            <p>Loading dashboard...</p>
+            <h2>ShopMart Dashboard</h2>
+            <p>Loading your marketplace data...</p>
           </div>
         </div>
       </div>
@@ -107,28 +137,25 @@ export default function AdminDashboard({ refreshKey = 0 }) {
 
   if (error) {
     return (
-      <div className="admin-dashboard">
+      <div className={`admin-dashboard ${darkMode ? "admin-dashboard-dark" : ""}`}>
         <div className="admin-dashboard-header">
           <div>
-            <h2>Admin Dashboard</h2>
+            <h2>Dashboard unavailable</h2>
             <p>{error}</p>
           </div>
-
           <button
             type="button"
             onClick={fetchDashboard}
             className="admin-refresh-btn"
           >
-            Retry
+            Try again
           </button>
         </div>
       </div>
     );
   }
 
-  if (!dashboard) {
-    return null;
-  }
+  if (!dashboard) return null;
 
   const users = dashboard.users || {};
   const products = dashboard.products || {};
@@ -136,74 +163,89 @@ export default function AdminDashboard({ refreshKey = 0 }) {
   const revenue = dashboard.revenue || {};
   const pending = dashboard.pending || {};
 
-  return (
-    <div className="admin-dashboard">
-      {/* ================= HEADER ================= */}
+  const recentOrders = dashboard.recentOrders || [];
+  const recentUsers = dashboard.recentUsers || [];
 
+  const filteredOrders = recentOrders.filter((order) => {
+    const query = search.trim().toLowerCase();
+
+    const matchesSearch = [
+      order._id,
+      order.user?.name,
+      order.user?.email,
+      order.status,
+    ].some((value) =>
+      String(value || "").toLowerCase().includes(query)
+    );
+
+    const matchesStatus =
+      statusFilter === "all" ||
+      String(order.status || "").toLowerCase() === statusFilter;
+
+    return matchesSearch && matchesStatus;
+  });
+
+  return (
+    <div
+      className={`admin-dashboard ${
+        darkMode ? "admin-dashboard-dark" : ""
+      }`}
+    >
       <div className="admin-dashboard-header">
         <div>
           <span className="admin-dashboard-label">
-            Overview
+            SHOPMART ADMIN
           </span>
-
-          <h2>Admin Dashboard</h2>
-
+          <h2>Store Overview</h2>
           <p>
-            Manage and monitor your ShopMart marketplace.
+            Monitor your marketplace, orders, revenue and customers.
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={fetchDashboard}
-          className="admin-refresh-btn"
-        >
-          Refresh
-        </button>
+        <div className="admin-dashboard-actions">
+          <button
+            type="button"
+            className="admin-refresh-btn"
+            onClick={() => setDarkMode((value) => !value)}
+          >
+            {darkMode ? "Light mode" : "Dark mode"}
+          </button>
+
+          <button
+            type="button"
+            className="admin-refresh-btn"
+            onClick={exportOrders}
+          >
+            Export orders
+          </button>
+
+          <button
+            type="button"
+            className="admin-refresh-btn"
+            onClick={fetchDashboard}
+          >
+            Refresh
+          </button>
+        </div>
       </div>
 
-      {/* ================= MAIN STATS ================= */}
+      <div className="admin-dashboard-toolbar">
+        <input
+          type="search"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Search orders, customers, email..."
+          aria-label="Search orders"
+        />
+
+        <span className="admin-dashboard-live">
+          ● Live dashboard data
+        </span>
+      </div>
 
       <div className="admin-stats-grid">
         <div className="admin-stat-card">
-          <span className="admin-stat-icon">👥</span>
-
-          <div>
-            <p>Total Users</p>
-            <h3>{users.total || 0}</h3>
-          </div>
-        </div>
-
-        <div className="admin-stat-card">
-          <span className="admin-stat-icon">🏪</span>
-
-          <div>
-            <p>Vendors</p>
-            <h3>{users.vendors || 0}</h3>
-          </div>
-        </div>
-
-        <div className="admin-stat-card">
-          <span className="admin-stat-icon">📦</span>
-
-          <div>
-            <p>Products</p>
-            <h3>{products.total || 0}</h3>
-          </div>
-        </div>
-
-        <div className="admin-stat-card">
-          <span className="admin-stat-icon">🛒</span>
-
-          <div>
-            <p>Total Orders</p>
-            <h3>{orders.total || 0}</h3>
-          </div>
-        </div>
-
-        <div className="admin-stat-card">
-          <span className="admin-stat-icon">💰</span>
-
+          <span className="admin-stat-icon">Rs</span>
           <div>
             <p>Total Revenue</p>
             <h3>{formatPrice(revenue.total)}</h3>
@@ -211,112 +253,125 @@ export default function AdminDashboard({ refreshKey = 0 }) {
         </div>
 
         <div className="admin-stat-card">
-          <span className="admin-stat-icon">👤</span>
-
+          <span className="admin-stat-icon">#</span>
           <div>
-            <p>Customers</p>
-            <h3>{users.customers || 0}</h3>
+            <p>Total Orders</p>
+            <h3>{orders.total || 0}</h3>
+          </div>
+        </div>
+
+        <div className="admin-stat-card">
+          <span className="admin-stat-icon">U</span>
+          <div>
+            <p>Total Users</p>
+            <h3>{users.total || 0}</h3>
+          </div>
+        </div>
+
+        <div className="admin-stat-card">
+          <span className="admin-stat-icon">P</span>
+          <div>
+            <p>Total Products</p>
+            <h3>{products.total || 0}</h3>
           </div>
         </div>
       </div>
 
-      {/* ================= PENDING ACTIONS ================= */}
-
-      <div className="admin-section">
+      <section className="admin-section">
         <div className="admin-section-heading">
           <div>
-            <h3>Pending Actions</h3>
-            <p>Items that may need admin attention.</p>
+            <h3>Needs Your Attention</h3>
+            <p>Marketplace overview and outstanding items.</p>
           </div>
         </div>
 
         <div className="admin-pending-grid">
           <div className="admin-pending-card">
-            <span>🏪</span>
-            <div>
-              <strong>
-                {pending.sellerApprovals || 0}
-              </strong>
-              <p>Seller Approvals</p>
-            </div>
+            <h3>{users.vendors || 0}</h3>
+            <p>Vendors</p>
+            <small>Seller accounts</small>
           </div>
 
           <div className="admin-pending-card">
-            <span>↩️</span>
-            <div>
-              <strong>
-                {pending.returns || 0}
-              </strong>
-              <p>Returns / Refunds</p>
-            </div>
+            <h3>{pending.returns || 0}</h3>
+            <p>Returns and Refunds</p>
+            <small>Requests to review</small>
           </div>
 
           <div className="admin-pending-card">
-            <span>🎫</span>
-            <div>
-              <strong>
-                {pending.supportTickets || 0}
-              </strong>
-              <p>Support Tickets</p>
-            </div>
+            <h3>{pending.supportTickets || 0}</h3>
+            <p>Support Tickets</p>
+            <small>Customer assistance</small>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* ================= ORDER STATISTICS ================= */}
-
-      <div className="admin-section">
+      <section className="admin-section">
         <div className="admin-section-heading">
           <div>
-            <h3>Order Statistics</h3>
-            <p>Current order status overview.</p>
+            <h3>Order Status</h3>
+            <p>Current order distribution.</p>
           </div>
         </div>
 
         <div className="admin-order-stats">
-          <div>
-            <span>Pending</span>
-            <strong>{orders.pending || 0}</strong>
+          <div className="admin-pending-card">
+            <p>Pending</p>
+            <h3>{orders.pending || 0}</h3>
           </div>
-
-          <div>
-            <span>Confirmed</span>
-            <strong>{orders.confirmed || 0}</strong>
+          <div className="admin-pending-card">
+            <p>Processing</p>
+            <h3>{orders.processing || 0}</h3>
           </div>
-
-          <div>
-            <span>Processing</span>
-            <strong>{orders.processing || 0}</strong>
+          <div className="admin-pending-card">
+            <p>Shipped</p>
+            <h3>{orders.shipped || 0}</h3>
           </div>
-
-          <div>
-            <span>Shipped</span>
-            <strong>{orders.shipped || 0}</strong>
+          <div className="admin-pending-card">
+            <p>Delivered</p>
+            <h3>{orders.delivered || 0}</h3>
           </div>
-
-          <div>
-            <span>Delivered</span>
-            <strong>{orders.delivered || 0}</strong>
-          </div>
-
-          <div>
-            <span>Cancelled</span>
-            <strong>{orders.cancelled || 0}</strong>
+          <div className="admin-pending-card">
+            <p>Cancelled</p>
+            <h3>{orders.cancelled || 0}</h3>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* ================= RECENT ORDERS ================= */}
-
-      <div className="admin-section">
+      <section className="admin-section">
         <div className="admin-section-heading">
           <div>
             <h3>Recent Orders</h3>
-            <p>Latest orders placed on ShopMart.</p>
+            <p>Search and filter your latest transactions.</p>
           </div>
+          <strong>{filteredOrders.length} orders</strong>
         </div>
 
-        {dashboard.recentOrders?.length > 0 ? (
+        <div className="admin-dashboard-filters">
+          {[
+            "all",
+            "pending",
+            "processing",
+            "shipped",
+            "delivered",
+            "cancelled",
+          ].map((status) => (
+            <button
+              type="button"
+              key={status}
+              className={
+                statusFilter === status ? "active" : ""
+              }
+              onClick={() => setStatusFilter(status)}
+            >
+              {status === "all"
+                ? "All orders"
+                : status.charAt(0).toUpperCase() + status.slice(1)}
+            </button>
+          ))}
+        </div>
+
+        {filteredOrders.length > 0 ? (
           <div className="admin-table-wrapper">
             <table className="admin-table">
               <thead>
@@ -325,26 +380,28 @@ export default function AdminDashboard({ refreshKey = 0 }) {
                   <th>Customer</th>
                   <th>Amount</th>
                   <th>Status</th>
-                  <th>Date</th>
+                  <th>Order Date</th>
                 </tr>
               </thead>
 
               <tbody>
-                {dashboard.recentOrders.map((order) => (
+                {filteredOrders.map((order) => (
                   <tr key={order._id}>
                     <td>
-                      #{String(order._id).slice(-8)}
+                      #{String(order._id || "").slice(-8).toUpperCase()}
                     </td>
 
                     <td>
-                      {order.user?.name ||
-                        order.user?.email ||
-                        "Unknown"}
+                      <strong>
+                        {order.user?.name || "Customer"}
+                      </strong>
+                      <br />
+                      <small>
+                        {order.user?.email || "-"}
+                      </small>
                     </td>
 
-                    <td>
-                      {formatPrice(order.totalAmount)}
-                    </td>
+                    <td>{formatPrice(order.totalAmount)}</td>
 
                     <td>
                       <span
@@ -352,13 +409,11 @@ export default function AdminDashboard({ refreshKey = 0 }) {
                           order.status
                         )}`}
                       >
-                        {order.status || "unknown"}
+                        {order.status || "Unknown"}
                       </span>
                     </td>
 
-                    <td>
-                      {formatDate(order.createdAt)}
-                    </td>
+                    <td>{formatDate(order.createdAt)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -366,22 +421,20 @@ export default function AdminDashboard({ refreshKey = 0 }) {
           </div>
         ) : (
           <div className="admin-empty">
-            No orders found.
+            No orders match your search or filter.
           </div>
         )}
-      </div>
+      </section>
 
-      {/* ================= RECENT USERS ================= */}
-
-      <div className="admin-section">
+      <section className="admin-section">
         <div className="admin-section-heading">
           <div>
-            <h3>Recent Users</h3>
-            <p>Recently registered ShopMart users.</p>
+            <h3>Recently Registered Users</h3>
+            <p>Latest members in your marketplace.</p>
           </div>
         </div>
 
-        {dashboard.recentUsers?.length > 0 ? (
+        {recentUsers.length > 0 ? (
           <div className="admin-table-wrapper">
             <table className="admin-table">
               <thead>
@@ -395,23 +448,17 @@ export default function AdminDashboard({ refreshKey = 0 }) {
               </thead>
 
               <tbody>
-                {dashboard.recentUsers.map((user) => (
+                {recentUsers.map((user) => (
                   <tr key={user._id}>
-                    <td>{user.name || "-"}</td>
-
+                    <td>{user.name || "Unnamed user"}</td>
                     <td>{user.email || "-"}</td>
-
                     <td>{user.phone || "-"}</td>
-
                     <td>
                       <span className="admin-role">
                         {user.role || "customer"}
                       </span>
                     </td>
-
-                    <td>
-                      {formatDate(user.createdAt)}
-                    </td>
+                    <td>{formatDate(user.createdAt)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -422,7 +469,7 @@ export default function AdminDashboard({ refreshKey = 0 }) {
             No users found.
           </div>
         )}
-      </div>
+      </section>
     </div>
   );
 }

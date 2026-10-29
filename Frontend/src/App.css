@@ -3661,3 +3661,471 @@ body.dash-lock { overflow: hidden; }
     padding: 14px;
   }
 }
+
+/* ===== ShopMart Admin Dashboard Modern Design ===== */
+
+.admin-dashboard {
+  padding: 28px;
+  background: #f4f7fb;
+  min-height: 100vh;
+  color: #172033;
+}
+
+.admin-dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.admin-dashboard-header h1,
+.admin-dashboard-header h2 {
+  color: #172033;
+  font-size: 30px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.admin-dashboard-header p {
+  color: #7b8497;
+  font-size: 14px;
+}
+
+.admin-refresh-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 12px 18px;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.admin-refresh-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.admin-stat-card {
+  background: #fff;
+  border: 1px solid #e8edf5;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 5px 20px rgba(23, 37, 84, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(23, 37, 84, 0.09);
+}
+
+.admin-stat-card h3 {
+  color: #7b8497;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.admin-stat-card h2 {
+  color: #172033;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.admin-stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #eaf2ff;
+  color: #2563eb;
+  margin-bottom: 16px;
+  font-size: 20px;
+}
+
+.admin-section {
+  background: #fff;
+  border: 1px solid #e8edf5;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 5px 20px rgba(23, 37, 84, 0.04);
+}
+
+.admin-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.admin-section-heading h2,
+.admin-section-heading h3 {
+  color: #172033;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.admin-pending-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.admin-pending-card {
+  background: #f8faff;
+  border: 1px solid #e8edf5;
+  border-radius: 12px;
+  padding: 18px;
+  transition: 0.2s ease;
+}
+
+.admin-pending-card:hover {
+  border-color: #bfdbfe;
+  transform: translateY(-2px);
+}
+
+.admin-order-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.admin-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 10px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+.admin-table thead {
+  background: #f4f7fb;
+}
+
+.admin-table th {
+  color: #7b8497;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 15px;
+  border-bottom: 1px solid #edf0f5;
+}
+
+.admin-table td {
+  color: #475569;
+}
+
+.admin-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.admin-table tbody tr:hover {
+  background: #f8faff;
+}
+
+.admin-status {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.admin-status.status-delivered {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.admin-status.status-cancelled {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.admin-status.status-pending {
+  background: #fef3c7;
+  color: #a16207;
+}
+
+.admin-status.status-processing {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.admin-status.status-shipped {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.admin-role {
+  display: inline-block;
+  padding: 5px 9px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.admin-empty {
+  padding: 30px;
+  text-align: center;
+  color: #7b8497;
+}
+
+@media (max-width: 1000px) {
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-pending-grid,
+  .admin-order-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-dashboard {
+    padding: 14px;
+  }
+
+  .admin-dashboard-header h1,
+  .admin-dashboard-header h2 {
+    font-size: 23px;
+  }
+
+  .admin-stats-grid,
+  .admin-pending-grid,
+  .admin-order-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-section {
+    padding: 15px;
+  }
+
+  .admin-stat-card {
+    padding: 18px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 11px;
+  }
+}
+
+/* ===== Admin Dashboard Toolbar and Filters ===== */
+
+.admin-dashboard-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.admin-dashboard-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.admin-dashboard-toolbar input {
+  width: min(100%, 520px);
+  padding: 13px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 11px;
+  outline: none;
+  background: #fff;
+  color: #172033;
+  font-size: 13px;
+}
+
+.admin-dashboard-toolbar input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px #2563eb18;
+}
+
+.admin-dashboard-live {
+  color: #15803d;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.admin-dashboard-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.admin-dashboard-filters button {
+  padding: 9px 13px;
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+  background: #fff;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.admin-dashboard-filters button:hover {
+  border-color: #93c5fd;
+  color: #2563eb;
+}
+
+.admin-dashboard-filters button.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+.admin-dashboard .admin-section-heading p {
+  margin-top: 5px;
+  color: #7b8497;
+  font-size: 13px;
+}
+
+.admin-dashboard .admin-pending-card h3 {
+  margin-bottom: 8px;
+  color: #172033;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.admin-dashboard .admin-pending-card p {
+  color: #475569;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.admin-dashboard .admin-pending-card small {
+  display: block;
+  margin-top: 6px;
+  color: #7b8497;
+}
+
+.admin-dashboard .admin-table td strong {
+  color: #172033;
+}
+
+.admin-dashboard .admin-table td small {
+  display: inline-block;
+  margin-top: 4px;
+  color: #7b8497;
+}
+
+/* Dark mode */
+.admin-dashboard-dark {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.admin-dashboard-dark .admin-dashboard-header h2,
+.admin-dashboard-dark .admin-stat-card h3,
+.admin-dashboard-dark .admin-pending-card h3,
+.admin-dashboard-dark .admin-section-heading h3,
+.admin-dashboard-dark .admin-table td strong {
+  color: #e2e8f0;
+}
+
+.admin-dashboard-dark .admin-dashboard-header p,
+.admin-dashboard-dark .admin-section-heading p {
+  color: #94a3b8;
+}
+
+.admin-dashboard-dark .admin-stat-card,
+.admin-dashboard-dark .admin-section,
+.admin-dashboard-dark .admin-pending-card {
+  background: #172033;
+  border-color: #29354a;
+  color: #e2e8f0;
+}
+
+.admin-dashboard-dark .admin-stat-card p,
+.admin-dashboard-dark .admin-pending-card p,
+.admin-dashboard-dark .admin-table td {
+  color: #cbd5e1;
+}
+
+.admin-dashboard-dark .admin-table thead,
+.admin-dashboard-dark .admin-table tbody tr:hover {
+  background: #202c40;
+}
+
+.admin-dashboard-dark .admin-table th {
+  color: #94a3b8;
+}
+
+.admin-dashboard-dark .admin-table th,
+.admin-dashboard-dark .admin-table td {
+  border-color: #29354a;
+}
+
+.admin-dashboard-dark .admin-dashboard-toolbar input {
+  background: #172033;
+  border-color: #29354a;
+  color: #e2e8f0;
+}
+
+.admin-dashboard-dark .admin-dashboard-filters button {
+  background: #172033;
+  border-color: #29354a;
+  color: #cbd5e1;
+}
+
+.admin-dashboard-dark .admin-dashboard-filters button.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+@media (max-width: 650px) {
+  .admin-dashboard-dark {
+    padding: 14px;
+  }
+
+  .admin-dashboard-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-dashboard-toolbar input {
+    width: 100%;
+  }
+
+  .admin-dashboard-actions {
+    width: 100%;
+  }
+}
