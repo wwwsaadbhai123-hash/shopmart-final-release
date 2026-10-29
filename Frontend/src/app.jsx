@@ -219,7 +219,7 @@ const RatingStars = ({ rating = 0 }) => {
     >
       {[1, 2, 3, 4, 5].map((star) => (
         <span key={star}>
-          {star <= roundedRating ? "â˜…" : "â˜†"}
+          {star <= roundedRating ? "★" : "☆"}
         </span>
       ))}
     </div>
@@ -2022,7 +2022,7 @@ export default function App() {
             aria-label="Close menu"
             onClick={closeNav}
           >
-            Ã—
+          ×
           </button>
 
           <button type="button" onClick={() => goToSection("home")}>
@@ -3741,7 +3741,7 @@ export default function App() {
 
           <div className="footer-bottom">
 
-            Â©{" "}
+            ©{" "}
             {new Date().getFullYear()}{" "}
             ShopMart. All rights
             reserved.
