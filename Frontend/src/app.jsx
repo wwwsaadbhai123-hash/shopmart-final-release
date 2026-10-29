@@ -3281,7 +3281,7 @@ export default function App() {
                               </span>
 
                               <span>
-                                Ã—{" "}
+                               ×{" "}
                                 {item?.quantity ||
                                   1}
                               </span>
@@ -3473,7 +3473,7 @@ export default function App() {
                 )
               }
             >
-              Ã—
+           ×
             </button>
 
             <h2>
