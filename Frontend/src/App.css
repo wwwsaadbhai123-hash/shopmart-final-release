@@ -3137,3 +3137,300 @@ body.dash-lock { overflow: hidden; }
   }
 }
 /* ===== END SHOPMART CUSTOMER FLOATING CHAT ===== */
+
+/* Admin/Seller dashboard navigation polish */
+.dash-sidebar {
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  letter-spacing: normal;
+  word-spacing: normal;
+}
+
+.dash-nav {
+  padding: 16px 12px;
+}
+
+.dash-nav-group {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  margin-bottom: 22px;
+}
+
+.dash-nav-label {
+  display: block;
+  padding: 8px 12px;
+  margin: 0 0 4px;
+  line-height: 1.5;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  letter-spacing: 0.08em;
+}
+
+.dash-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  padding: 11px 12px;
+  line-height: 1.45;
+  letter-spacing: normal;
+  word-spacing: normal;
+  white-space: normal;
+  text-align: left;
+  border-radius: 10px;
+  transition: background-color 180ms ease, color 180ms ease,
+    transform 180ms ease, box-shadow 180ms ease;
+}
+
+.dash-nav-item > span:last-child {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.dash-nav-item:hover {
+  transform: translateX(3px);
+}
+
+.dash-nav-item.active {
+  box-shadow: inset 3px 0 0 rgba(255, 255, 255, 0.85);
+}
+
+.dash-nav-icon {
+  flex: 0 0 22px;
+  width: 22px;
+  min-width: 22px;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dash-nav-item {
+    transition: none;
+  }
+
+  .dash-nav-item:hover {
+    transform: none;
+  }
+}
+
+/* Admin Dashboard — Premium UI */
+.admin-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  font-family: Inter, "Segoe UI", sans-serif;
+  animation: adminFadeIn .45s ease both;
+}
+
+.admin-dashboard-header {
+  align-items: center;
+  gap: 20px;
+  padding: 8px 0 22px;
+}
+
+.admin-dashboard-header h2 {
+  font-size: clamp(26px, 3vw, 34px);
+  line-height: 1.25;
+  letter-spacing: -.035em;
+  margin: 12px 0 8px;
+  color: var(--text-primary, #172033);
+}
+
+.admin-dashboard-header p,
+.admin-section-heading p {
+  line-height: 1.65;
+  margin: 0;
+  color: var(--text-muted, #64748b);
+}
+
+.admin-stats-grid {
+  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.admin-stat-card,
+.admin-pending-card,
+.admin-order-stats > div,
+.admin-section {
+  border: 1px solid rgba(148, 163, 184, .18);
+  box-shadow: 0 5px 20px rgba(15, 23, 42, .045);
+  transition: transform .22s ease, box-shadow .22s ease,
+    border-color .22s ease;
+}
+
+.admin-stat-card {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  gap: 16px;
+  padding: 22px;
+  border-radius: 18px;
+  background: var(--bg-primary, #fff);
+}
+
+.admin-stat-card::after {
+  content: "";
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  right: -36px;
+  top: -36px;
+  border-radius: 50%;
+  background: var(--primary, #6366f1);
+  opacity: .06;
+  transition: transform .3s ease, opacity .3s ease;
+}
+
+.admin-stat-card:hover,
+.admin-pending-card:hover,
+.admin-order-stats > div:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, .09);
+  border-color: rgba(99, 102, 241, .28);
+}
+
+.admin-stat-card:hover::after {
+  transform: scale(1.5);
+  opacity: .1;
+}
+
+.admin-stat-icon {
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  transition: transform .25s ease;
+}
+
+.admin-stat-card:hover .admin-stat-icon {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.admin-stat-card p {
+  line-height: 1.5;
+  margin-bottom: 7px;
+}
+
+.admin-stat-card h3 {
+  font-size: clamp(22px, 2vw, 28px);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.admin-section {
+  padding: 24px;
+  border-radius: 20px;
+  background: var(--bg-primary, #fff);
+  animation: adminFadeIn .5s ease both;
+}
+
+.admin-section-heading {
+  margin-bottom: 20px;
+}
+
+.admin-section-heading h3 {
+  margin: 0 0 6px;
+  font-size: 19px;
+  line-height: 1.4;
+  letter-spacing: -.02em;
+}
+
+.admin-pending-grid {
+  gap: 16px;
+}
+
+.admin-pending-card {
+  min-width: 0;
+  padding: 18px;
+  border-radius: 15px;
+  background: var(--bg-primary, #fff);
+  gap: 14px;
+}
+
+.admin-pending-card strong {
+  font-size: 24px;
+  line-height: 1.3;
+}
+
+.admin-pending-card p {
+  margin: 5px 0 0;
+  line-height: 1.5;
+  color: var(--text-muted, #64748b);
+}
+
+.admin-order-stats {
+  gap: 14px;
+}
+
+.admin-order-stats > div {
+  padding: 18px;
+  border-radius: 14px;
+  background: var(--bg-primary, #fff);
+  gap: 10px;
+}
+
+.admin-order-stats span {
+  line-height: 1.5;
+  color: var(--text-muted, #64748b);
+}
+
+.admin-order-stats strong {
+  font-size: 24px;
+  line-height: 1.3;
+}
+
+.admin-refresh-btn {
+  transition: transform .2s ease, box-shadow .2s ease,
+    background-color .2s ease;
+}
+
+.admin-refresh-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(99, 102, 241, .2);
+}
+
+.admin-refresh-btn:active {
+  transform: scale(.97);
+}
+
+@keyframes adminFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .admin-dashboard { gap: 20px; }
+  .admin-stats-grid { grid-template-columns: 1fr; gap: 12px; }
+  .admin-section { padding: 17px; border-radius: 16px; }
+  .admin-dashboard-header { align-items: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-dashboard,
+  .admin-section {
+    animation: none;
+  }
+
+  .admin-stat-card,
+  .admin-stat-card::after,
+  .admin-stat-icon,
+  .admin-pending-card,
+  .admin-order-stats > div,
+  .admin-refresh-btn {
+    transition: none;
+  }
+
+  .admin-stat-card:hover,
+  .admin-pending-card:hover,
+  .admin-order-stats > div:hover,
+  .admin-refresh-btn:hover {
+    transform: none;
+  }
+}
