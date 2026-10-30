@@ -295,22 +295,9 @@ useEffect(() => {
     };
 
   return (
-    <div className="live-chat">
+<div className={`live-chat ${adminMode ? "admin-live-chat" : "customer-live-chat"}`}>
 
-      <div className="live-chat-header">
-        <div>
-          <span className="admin-dashboard-label">
-            Support
-          </span>
-
-          <h2>Live Chat</h2>
-
-          <p>
-            Chat with customers, sellers
-            and support.
-          </p>
-        </div>
-      </div>
+      
 
       {error && (
         <div className="admin-error-message">
