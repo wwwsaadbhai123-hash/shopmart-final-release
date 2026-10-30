@@ -42,7 +42,7 @@ import DashboardShell from "./Components/DashboardShell";
 
 // ============================================================
 // API CONFIG
-// (imported from ./config ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â see top of file)
+// (imported from ./config ← see top of file)
 // ============================================================
 
 const GOOGLE_CLIENT_ID =
@@ -2139,7 +2139,7 @@ export default function App() {
       label: "Management",
       items: [
         { id: "users", label: "Users", icon: String.fromCodePoint(0x1F465) },
-        { id: "sellers", label: "Sellers", icon: "ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Âª" },
+        { id: "sellers", label: "Sellers", icon: String.fromCodePoint(0x1F3EA) },
         { id: "products", label: "Products", icon: String.fromCodePoint(0x1F4E6) },
         { id: "orders", label: "Orders", icon: String.fromCodePoint(0x1F9FE) },
         { id: "returns", label: "Returns", icon: String.fromCodePoint(0x21A9) },
@@ -2279,7 +2279,7 @@ export default function App() {
                 )
               }
             >
-              ÃƒÂ¢Ã¢â‚¬Â Ã‚Â Back to Shop
+              {"←"} Back to Shop
             </button>
 
             <div className="product-details-grid">
@@ -2380,7 +2380,7 @@ export default function App() {
                         )
                       }
                     >
-                      âˆ’
+                      {"−"}
                     </button>
 
                     <span>
@@ -2444,8 +2444,8 @@ export default function App() {
                         item?._id ===
                         selectedProduct?._id
                     )
-                      ? "ÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¥ Wishlisted"
-                      : "ÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¡ Wishlist"}
+                      ?  `${String.fromCodePoint(0x2665)} Wishlisted`
+                      : `${String.fromCodePoint(0x2661)} Wishlist`}
                   </button>
 
                 </div>
@@ -2967,7 +2967,7 @@ export default function App() {
                               )
                             }
                           >
-                            âˆ’
+                            {"−"}
                           </button>
 
                           <span>
@@ -3755,6 +3755,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
