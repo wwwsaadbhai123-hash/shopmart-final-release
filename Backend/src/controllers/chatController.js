@@ -494,3 +494,15 @@ const sendGuestMessage = async (req, res) => {
   reopenConversation,
   getAllConversations,
 };
+module.exports = {
+  getMyConversations,
+  createConversation,
+  getMessages,
+  sendMessage,
+  closeConversation,
+  reopenConversation,
+  getAllConversations,
+  startGuestConversation,
+  getGuestMessages,
+  sendGuestMessage,
+};
