@@ -10,6 +10,9 @@ const {
   closeConversation,
   reopenConversation,
   getAllConversations,
+  startGuestConversation,
+  getGuestMessages,
+  sendGuestMessage,
 } = require("../controllers/chatController");
 
 const { protect } = require("../middleware/authMiddleware");
@@ -31,6 +34,11 @@ const adminOnly = (req, res, next) => {
 
   next();
 };
+
+// Public guest support endpoints; access is restricted by a private per-chat token.
+router.post("/guest/start", startGuestConversation);
+router.get("/guest/:id/messages", getGuestMessages);
+router.post("/guest/:id/messages", sendGuestMessage);
 
 router.get("/", protect, getMyConversations);
 router.post("/", protect, createConversation);
