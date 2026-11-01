@@ -280,16 +280,11 @@ useEffect(() => {
         conversation?.participants ||
         [];
 
+      if (conversation?.guest) return null;
       return (
         participants.find(
           (participant) =>
-            String(
-              participant._id
-            ) !==
-            String(
-              currentUser?._id ||
-                currentUser?.id
-            )
+            String(participant._id) !== String(currentUser?._id || currentUser?.id)
         ) || participants[0]
       );
     };
@@ -363,14 +358,11 @@ useEffect(() => {
                     }
                   >
                     <strong>
-                      {other?.name ||
-                        other?.email ||
-                        "User"}
+                      {conversation.guest?.name || other?.name || other?.email || "User"}
                     </strong>
 
                     <span>
-                      {conversation.lastMessage ||
-                        "No messages yet"}
+                      {conversation.guest?.email || conversation.lastMessage || "No messages yet"}
                     </span>
 
                     <small>
@@ -405,16 +397,11 @@ useEffect(() => {
               <div className="chat-window-header">
                 <div>
                   <strong>
-                    {getOtherParticipant(
-                      selectedConversation
-                    )?.name ||
-                      "Conversation"}
+                    {selectedConversation.guest?.name || getOtherParticipant(selectedConversation)?.name || "Conversation"}
                   </strong>
 
                   <span>
-                    {selectedConversation
-                      .subject ||
-                      "General Support"}
+                    {selectedConversation.guest?.email || selectedConversation.subject || "General Support"}
                   </span>
                 </div>
 
@@ -443,14 +430,8 @@ useEffect(() => {
                 ) : (
                   messages.map(
                     (item) => {
-                      const isMine =
-                        String(
-                          item.sender?._id
-                        ) ===
-                        String(
-                          currentUser?._id ||
-                            currentUser?.id
-                        );
+                      const senderId = item.sender?._id || item.sender;
+                      const isMine = Boolean(senderId) && String(senderId) === String(currentUser?._id || currentUser?.id);
 
                       return (
                         <div
