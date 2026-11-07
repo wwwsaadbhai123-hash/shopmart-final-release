@@ -1,3 +1,4 @@
+
 const User = require("../models/User");
 const Seller = require("../models/Seller");
 
@@ -8,16 +9,9 @@ const Seller = require("../models/Seller");
 const registerSeller = async (req, res) => {
   try {
     const userId = req.user.id;
+    const { shopName, cnicNumber } = req.body;
 
-    const {
-      shopName,
-      cnicNumber,
-    } = req.body;
-
-    // -----------------------------------------------------
-    // VALIDATION
-    // -----------------------------------------------------
-
+    // Validate shop name
     if (!shopName || !shopName.trim()) {
       return res.status(400).json({
         success: false,
@@ -25,6 +19,7 @@ const registerSeller = async (req, res) => {
       });
     }
 
+    // Validate CNIC
     if (!cnicNumber || !cnicNumber.trim()) {
       return res.status(400).json({
         success: false,
@@ -32,7 +27,6 @@ const registerSeller = async (req, res) => {
       });
     }
 
-    // Pakistani CNIC format: 13 digits
     const cleanCnic = cnicNumber.replace(/[-\s]/g, "");
 
     if (!/^\d{13}$/.test(cleanCnic)) {
@@ -42,10 +36,7 @@ const registerSeller = async (req, res) => {
       });
     }
 
-    // -----------------------------------------------------
-    // USER
-    // -----------------------------------------------------
-
+    // Find user
     const user = await User.findById(userId);
 
     if (!user) {
@@ -55,10 +46,7 @@ const registerSeller = async (req, res) => {
       });
     }
 
-    // -----------------------------------------------------
-    // ALREADY APPROVED
-    // -----------------------------------------------------
-
+    // Prevent already approved sellers
     if (
       user.role === "vendor" &&
       user.sellerStatus === "approved"
@@ -69,27 +57,17 @@ const registerSeller = async (req, res) => {
       });
     }
 
-    // -----------------------------------------------------
-    // ALREADY PENDING
-    // -----------------------------------------------------
+    // Check whether this is an application update
+    const isUpdating = user.sellerStatus === "pending";
 
-    if (user.sellerStatus === "pending") {
-      return res.status(400).json({
-        success: false,
-        message: "Your seller application is already pending",
-      });
-    }
-
-    // -----------------------------------------------------
-    // CNIC IMAGES
-    // -----------------------------------------------------
-
+    // Get uploaded CNIC images
     const cnicFrontImage =
       req.files?.cnicFront?.[0]?.filename || "";
 
     const cnicBackImage =
       req.files?.cnicBack?.[0]?.filename || "";
 
+    // Both images are required
     if (!cnicFrontImage || !cnicBackImage) {
       return res.status(400).json({
         success: false,
@@ -97,10 +75,7 @@ const registerSeller = async (req, res) => {
       });
     }
 
-    // -----------------------------------------------------
-    // SAVE SELLER APPLICATION
-    // -----------------------------------------------------
-
+    // Save application in User collection
     user.shopName = shopName.trim();
     user.cnicNumber = cleanCnic;
 
@@ -116,30 +91,38 @@ const registerSeller = async (req, res) => {
 
     await user.save();
 
+    // Create or update Seller collection record
     await Seller.findOneAndUpdate(
       { user: userId },
       {
-        user: userId,
-        shop_name: user.shopName,
-        cnic_number: user.cnicNumber,
-        cnic_front_image: user.cnicFrontImage,
-        cnic_back_image: user.cnicBackImage,
-        status: "pending",
-        rejectionReason: "",
+        $set: {
+          user: userId,
+          shop_name: user.shopName,
+          cnic_number: user.cnicNumber,
+          cnic_front_image: user.cnicFrontImage,
+          cnic_back_image: user.cnicBackImage,
+          status: "pending",
+          rejectionReason: "",
+        },
       },
-      { upsert: true, new: true, setDefaultsOnInsert: true }
+      {
+        upsert: true,
+        new: true,
+        setDefaultsOnInsert: true,
+      }
     );
 
-    res.status(201).json({
+    return res.status(isUpdating ? 200 : 201).json({
       success: true,
-      message:
-        "Seller application submitted successfully. Waiting for admin approval.",
+      message: isUpdating
+        ? "Seller application updated successfully. Waiting for admin approval."
+        : "Seller application submitted successfully. Waiting for admin approval.",
+
       seller: {
         id: user._id,
         name: user.name,
         email: user.email,
         shopName: user.shopName,
-        cnicNumber: user.cnicNumber,
         sellerStatus: user.sellerStatus,
         sellerAppliedAt: user.sellerAppliedAt,
       },
@@ -147,7 +130,7 @@ const registerSeller = async (req, res) => {
   } catch (error) {
     console.error("Seller registration error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Failed to submit seller application",
     });
@@ -161,7 +144,7 @@ const registerSeller = async (req, res) => {
 const getMySellerStatus = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select(
-      "-password -otp -otpExpires"
+      "-password -otp -otpExpires -cnicNumber"
     );
 
     if (!user) {
@@ -171,20 +154,19 @@ const getMySellerStatus = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
+
       seller: {
         id: user._id,
         name: user.name,
         email: user.email,
         phone: user.phone,
         shopName: user.shopName,
-        cnicNumber: user.cnicNumber,
         cnicFrontImage: user.cnicFrontImage,
         cnicBackImage: user.cnicBackImage,
         sellerStatus: user.sellerStatus,
-        sellerRejectionReason:
-          user.sellerRejectionReason,
+        sellerRejectionReason: user.sellerRejectionReason,
         sellerAppliedAt: user.sellerAppliedAt,
         sellerApprovedAt: user.sellerApprovedAt,
       },
@@ -192,7 +174,7 @@ const getMySellerStatus = async (req, res) => {
   } catch (error) {
     console.error("Get seller status error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Failed to get seller status",
     });
@@ -210,24 +192,19 @@ const getSellerApplications = async (req, res) => {
         $in: ["pending", "approved", "rejected"],
       },
     })
-      .select(
-        "-password -otp -otpExpires"
-      )
+      .select("-password -otp -otpExpires")
       .sort({
         sellerAppliedAt: -1,
       });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       sellers,
     });
   } catch (error) {
-    console.error(
-      "Get seller applications error:",
-      error
-    );
+    console.error("Get seller applications error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Failed to fetch seller applications",
     });
@@ -258,6 +235,13 @@ const approveSeller = async (req, res) => {
       });
     }
 
+    if (seller.sellerStatus !== "pending") {
+      return res.status(400).json({
+        success: false,
+        message: "Only pending applications can be approved",
+      });
+    }
+
     seller.role = "vendor";
     seller.sellerStatus = "approved";
     seller.sellerRejectionReason = "";
@@ -267,12 +251,18 @@ const approveSeller = async (req, res) => {
 
     await Seller.findOneAndUpdate(
       { user: seller._id },
-      { status: "approved", rejectionReason: "" }
+      {
+        $set: {
+          status: "approved",
+          rejectionReason: "",
+        },
+      }
     );
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Seller approved successfully",
+
       seller: {
         id: seller._id,
         name: seller.name,
@@ -286,7 +276,7 @@ const approveSeller = async (req, res) => {
   } catch (error) {
     console.error("Approve seller error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Failed to approve seller",
     });
@@ -311,7 +301,24 @@ const rejectSeller = async (req, res) => {
       });
     }
 
+    if (
+      seller.sellerStatus === "approved"
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Approved sellers cannot be rejected through this action",
+      });
+    }
+
+    if (seller.sellerStatus !== "pending") {
+      return res.status(400).json({
+        success: false,
+        message: "Only pending applications can be rejected",
+      });
+    }
+
     seller.sellerStatus = "rejected";
+
     seller.sellerRejectionReason =
       reason?.trim() || "Application rejected by admin";
 
@@ -322,14 +329,17 @@ const rejectSeller = async (req, res) => {
     await Seller.findOneAndUpdate(
       { user: seller._id },
       {
-        status: "rejected",
-        rejectionReason: seller.sellerRejectionReason,
+        $set: {
+          status: "rejected",
+          rejectionReason: seller.sellerRejectionReason,
+        },
       }
     );
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Seller application rejected",
+
       seller: {
         id: seller._id,
         name: seller.name,
@@ -337,19 +347,22 @@ const rejectSeller = async (req, res) => {
         shopName: seller.shopName,
         role: seller.role,
         sellerStatus: seller.sellerStatus,
-        sellerRejectionReason:
-          seller.sellerRejectionReason,
+        sellerRejectionReason: seller.sellerRejectionReason,
       },
     });
   } catch (error) {
     console.error("Reject seller error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Failed to reject seller",
     });
   }
 };
+
+// =========================================================
+// EXPORTS
+// =========================================================
 
 module.exports = {
   registerSeller,
