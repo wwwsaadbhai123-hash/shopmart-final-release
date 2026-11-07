@@ -160,6 +160,10 @@ app.use(
 // CORS
 // ============================================================
 
+// ============================================================
+// CORS
+// ============================================================
+
 const allowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
@@ -168,40 +172,37 @@ const allowedOrigins = [
   process.env.FRONTEND_URL,
 ].filter(Boolean);
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow Postman/server-to-server requests
-      if (!origin) {
-        return callback(null, true);
-      }
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
 
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
+    return callback(
+      new Error("CORS policy: Origin not allowed.")
+    );
+  },
 
-      return callback(
-        new Error("CORS policy: Origin not allowed.")
-      );
-    },
+  methods: [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
+  ],
 
-    methods: [
-      "GET",
-      "POST",
-      "PUT",
-      "PATCH",
-      "DELETE",
-      "OPTIONS",
-    ],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "x-guest-chat-token",
+  ],
 
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-    ],
+  credentials: false,
+  optionsSuccessStatus: 204,
+};
 
-    credentials: false,
-  })
-);
+app.use(cors(corsOptions));
 
 // ============================================================
 // GENERAL API RATE LIMIT
