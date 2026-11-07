@@ -2168,10 +2168,13 @@ export default function App() {
             <SellerSupport refreshKey={sellerRefreshKey} />
           </>
         );
-      case "registration":
-        return (
-          <SellerRegistration onSubmitted={handleSellerSubmitted} />
-        );
+   case "registration":
+  return (
+    <SellerRegistration
+      token={getAuthToken()}
+      onSubmitted={handleSellerSubmitted}
+    />
+  );
       case "status":
         return (
           <div className="seller-status-wrapper">
