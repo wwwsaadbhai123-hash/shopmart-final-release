@@ -1,3 +1,4 @@
+
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
@@ -64,9 +65,7 @@ const userSchema = new mongoose.Schema(
       default: true,
     },
 
-    // =====================================================
     // SELLER INFORMATION - PHASE 15
-    // =====================================================
 
     shopName: {
       type: String,
@@ -115,13 +114,11 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-// ============================================================
-// PHASE 26 — PERFORMANCE INDEXES
-// ============================================================
 
-userSchema.index({
-  email: 1,
-});
+// PHASE 26 - PERFORMANCE INDEXES
+
+// Email index is already created by unique: true.
+// Do NOT declare userSchema.index({ email: 1 }) again.
 
 userSchema.index({
   role: 1,
