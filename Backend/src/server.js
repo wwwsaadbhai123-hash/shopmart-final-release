@@ -65,7 +65,7 @@ const {
 } = require("./controllers/paymentController");
 
 // ============================================================
-// APP
+// APP CONFIGURATION
 // ============================================================
 
 const app = express();
@@ -76,59 +76,56 @@ app.disable("x-powered-by");
 const PORT = process.env.PORT || 5000;
 
 // ============================================================
-// CORS CONFIGURATION - FIXED
+// CORS CONFIGURATION
 // ============================================================
 
-// Add frontend URLs through environment variables.
-// FRONTEND_URL=https://your-production-frontend.vercel.app
-//
-// Optional:
-// FRONTEND_URLS=https://frontend1.vercel.app,https://frontend2.vercel.app
+const normalizeOrigin = (url) => {
+  return url.trim().replace(/\/+$/, "");
+};
 
 const allowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
 
   "https://shopmart-frontend-three.vercel.app",
+
   "https://shopmart-frontend-git-main-saad-portfolio1.vercel.app",
 
   "https://shopmart-frontend-c3nfnwhdl-saad-portfolio1.vercel.app",
 
   ...(process.env.FRONTEND_URL || "")
     .split(",")
-    .map((url) => url.trim().replace(/\/+$/, ""))
+    .map(normalizeOrigin)
     .filter(Boolean),
 
   ...(process.env.FRONTEND_URLS || "")
     .split(",")
-    .map((url) => url.trim().replace(/\/+$/, ""))
+    .map(normalizeOrigin)
     .filter(Boolean),
 ];
+
+// ============================================================
+// CORS OPTIONS
+// ============================================================
 
 const corsOptions = {
   origin: function (origin, callback) {
 
-    // Allow requests without Origin.
-    // Example: Postman, server-to-server requests.
+    // Allow Postman and server-to-server requests.
 
     if (!origin) {
       return callback(null, true);
     }
 
-    const normalizedOrigin = origin.replace(/\/+$/, "");
+    const normalizedOrigin = normalizeOrigin(origin);
 
-    // Exact production and local origins.
+    // Check explicitly allowed origins.
 
     if (allowedOrigins.includes(normalizedOrigin)) {
       return callback(null, true);
     }
 
-    // Allow deployments belonging to the ShopMart
-    // frontend Vercel project naming pattern.
-    //
-    // Examples:
-    // shopmart-frontend-three.vercel.app
-    // shopmart-frontend-c3nfnwhdl-saad-portfolio1.vercel.app
+    // Allow ShopMart Vercel deployments.
 
     const shopmartVercelPattern =
       /^https:\/\/shopmart-frontend(?:-[a-z0-9-]+)?\.vercel\.app$/i;
@@ -152,6 +149,9 @@ const corsOptions = {
     "DELETE",
     "OPTIONS",
   ],
+
+  // IMPORTANT:
+  // x-guest-chat-token is required for guest live chat.
 
   allowedHeaders: [
     "Content-Type",
@@ -178,10 +178,11 @@ const corsOptions = {
 // ============================================================
 
 app.use(performanceHeaders);
+
 app.use(cacheControl);
 
 // ============================================================
-// CORS MUST RUN BEFORE OTHER SECURITY MIDDLEWARE
+// CORS MUST RUN BEFORE SECURITY MIDDLEWARE
 // ============================================================
 
 app.use(cors(corsOptions));
@@ -210,6 +211,10 @@ app.use(requestSizeGuard);
 
 app.use(securityHeaders);
 
+// ============================================================
+// COMPRESSION
+// ============================================================
+
 app.use(
   compression({
     threshold: 1024,
@@ -224,7 +229,7 @@ app.use("/api", apiLimiter);
 
 // ============================================================
 // STRIPE WEBHOOK
-// IMPORTANT: BEFORE express.json()
+// IMPORTANT: BEFORE EXPRESS.JSON()
 // ============================================================
 
 app.post(
@@ -323,7 +328,7 @@ app.get("/", (req, res) => {
 });
 
 // ============================================================
-// 404
+// 404 HANDLER
 // ============================================================
 
 app.use((req, res) => {
@@ -381,4 +386,3 @@ app.listen(PORT, () => {
   );
 
 });
-
